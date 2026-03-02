@@ -38,18 +38,22 @@ def test_eager_model_load(monkeypatch) -> None:
     assert node.model_path == "yolo26n.pt"
 
 
+def test_stride_exposed(monkeypatch) -> None:
+    _install_mock_ultralytics(monkeypatch)
+    node = YOLO26Detection(model_path="yolo26n.pt")
+    assert isinstance(node.stride, int)
+    assert node.stride >= 1
+
+
 def test_forward_raw_tensor_output(monkeypatch) -> None:
     _install_mock_ultralytics(monkeypatch)
     node = YOLO26Detection(model_path="yolo26n.pt")
 
-    # Batch of 2 frames to validate native batching support.
-    rgb_image = torch.rand((2, 32, 64, 3), dtype=torch.float32)
-    outputs = node.forward(rgb_image=rgb_image)
+    # Input is a stride-aligned CHW BGR batch as produced by YOLOPreprocess.
+    preprocessed = torch.rand((2, 3, 32, 64), dtype=torch.float32)
+    outputs = node.forward(preprocessed=preprocessed)
 
-    assert set(outputs.keys()) == {"raw_preds", "model_input_hw", "orig_hw"}
+    assert set(outputs.keys()) == {"raw_preds"}
     assert isinstance(outputs["raw_preds"], torch.Tensor)
     assert outputs["raw_preds"].dtype == torch.float32
-    assert outputs["model_input_hw"].shape == (2, 2)
-    assert outputs["orig_hw"].shape == (2, 2)
-    assert outputs["model_input_hw"].tolist() == [[32, 64], [32, 64]]
-    assert outputs["orig_hw"].tolist() == [[32, 64], [32, 64]]
+    assert outputs["raw_preds"].shape[0] == 2
