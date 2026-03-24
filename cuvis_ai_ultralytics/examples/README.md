@@ -19,7 +19,7 @@ Set-Location D:\code-repos\cuvis-ai\cuvis-ai-sam3
 $env:PYTHONPATH = "D:\code-repos\cuvis-ai-ultralytics\ultralytics-init"
 
 uv run python D:\code-repos\cuvis-ai-ultralytics\ultralytics-init\cuvis_ai_ultralytics\examples\object_detection_yolo26.py `
-  --video-path "D:\data\XMR_notarget_Busstation\20260226\Auto_013+01-trustimulus.mp4" `
+  --video-path "D:\data\XMR_notarget_Busstation\20260226\Auto_013+01.mp4" `
   --start-frame 0 `
   --end-frame 49 `
   --model-path yolo26n.pt `
