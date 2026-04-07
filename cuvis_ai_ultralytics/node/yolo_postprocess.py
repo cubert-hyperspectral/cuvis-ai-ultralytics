@@ -70,9 +70,7 @@ class YOLOPostprocess(Node):
 
         # Allow model_input_hw/orig_hw provided as single row (broadcast) or per-sample.
         if model_input_hw.shape[0] not in {1, batch}:
-            raise ValueError(
-                f"model_input_hw batch mismatch: got {model_input_hw.shape[0]} rows for batch {batch}"
-            )
+            raise ValueError(f"model_input_hw batch mismatch: got {model_input_hw.shape[0]} rows for batch {batch}")
         if orig_hw.shape[0] not in {1, batch}:
             raise ValueError(f"orig_hw batch mismatch: got {orig_hw.shape[0]} rows for batch {batch}")
 

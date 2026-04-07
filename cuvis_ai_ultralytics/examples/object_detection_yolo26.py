@@ -127,8 +127,7 @@ def _resolve_output_dir(video_path: Path, output_dir: Path | None) -> Path:
     type=click.Path(file_okay=False, path_type=Path),
     default=None,
     help=(
-        "Directory to write results. Default: "
-        "D:/code-repos/cuvis-ai-ultralytics/ultralytics-init/outputs/{video_name}"
+        "Directory to write results. Default: D:/code-repos/cuvis-ai-ultralytics/ultralytics-init/outputs/{video_name}"
     ),
 )
 @click.option("--model-path", type=str, default="yolo26n.pt", show_default=True)
@@ -157,9 +156,7 @@ def _resolve_output_dir(video_path: Path, output_dir: Path | None) -> Path:
 @click.option("--line-thickness", type=int, default=2, show_default=True)
 @click.option("--draw-labels/--no-draw-labels", default=True, show_default=True)
 @click.option("--bf16", is_flag=True, default=False, help="Enable bfloat16 autocast.")
-@click.option(
-    "--compile", "compile_model", is_flag=True, default=False, help="Enable torch.compile."
-)
+@click.option("--compile", "compile_model", is_flag=True, default=False, help="Enable torch.compile.")
 def main(
     video_path: Path,
     start_frame: int,
@@ -198,9 +195,7 @@ def main(
     if width <= 0 or height <= 0:
         raise click.ClickException(f"Invalid video dimensions for {video_path}.")
     if total_frames > 0 and start_frame >= total_frames:
-        raise click.ClickException(
-            f"--start-frame {start_frame} is out of range for {total_frames} source frames."
-        )
+        raise click.ClickException(f"--start-frame {start_frame} is out of range for {total_frames} source frames.")
     if source_fps <= 0:
         source_fps = 30.0
 
@@ -354,7 +349,9 @@ def main(
                     "description": "YOLO26 video object detection output",
                     "source_video_path": str(video_path),
                     "source_start_frame": int(start_frame),
-                    "source_end_frame": int(last_source_frame_idx if last_source_frame_idx is not None else start_frame - 1),
+                    "source_end_frame": int(
+                        last_source_frame_idx if last_source_frame_idx is not None else start_frame - 1
+                    ),
                     "num_frames_processed": int(processed),
                     "generated_at": dt.datetime.now(dt.UTC).isoformat(timespec="seconds"),
                 },

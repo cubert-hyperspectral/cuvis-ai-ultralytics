@@ -58,17 +58,13 @@ class YOLOPreprocess(Node):
     def forward(self, rgb_image: torch.Tensor, **_: Any) -> dict[str, torch.Tensor]:
         """Preprocess a batch of RGB images for YOLO inference."""
         if rgb_image.ndim != 4 or rgb_image.shape[-1] != 3:
-            raise ValueError(
-                f"YOLOPreprocess expects rgb_image [B, H, W, 3], got {tuple(rgb_image.shape)}"
-            )
+            raise ValueError(f"YOLOPreprocess expects rgb_image [B, H, W, 3], got {tuple(rgb_image.shape)}")
 
         batch = int(rgb_image.shape[0])
         device = rgb_image.device
         in_h, in_w = int(rgb_image.shape[1]), int(rgb_image.shape[2])
 
-        orig_hw = torch.tensor(
-            [[in_h, in_w]] * batch, dtype=torch.int64, device=device
-        )
+        orig_hw = torch.tensor([[in_h, in_w]] * batch, dtype=torch.int64, device=device)
 
         # HWC RGB → CHW BGR; values stay in [0, 1].
         x = rgb_image[..., [2, 1, 0]].permute(0, 3, 1, 2).contiguous()
@@ -82,9 +78,7 @@ class YOLOPreprocess(Node):
             resized_h = max(int(round(in_h * gain)), 1)
             resized_w = max(int(round(in_w * gain)), 1)
             if resized_h != in_h or resized_w != in_w:
-                x = F.interpolate(
-                    x, size=(resized_h, resized_w), mode="bilinear", align_corners=False
-                )
+                x = F.interpolate(x, size=(resized_h, resized_w), mode="bilinear", align_corners=False)
 
             pad_h = target_h - resized_h
             pad_w = target_w - resized_w
@@ -95,9 +89,7 @@ class YOLOPreprocess(Node):
             if top or bottom or left or right:
                 x = F.pad(x, (left, right, top, bottom), value=114.0 / 255.0)
 
-        model_input_hw = torch.tensor(
-            [[x.shape[2], x.shape[3]]] * batch, dtype=torch.int64, device=device
-        )
+        model_input_hw = torch.tensor([[x.shape[2], x.shape[3]]] * batch, dtype=torch.int64, device=device)
 
         return {
             "preprocessed": x.float(),

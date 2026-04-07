@@ -81,9 +81,7 @@ class YOLO26Detection(Node):
     def forward(self, preprocessed: torch.Tensor, **_: Any) -> dict[str, torch.Tensor]:
         """Execute raw model forward on a stride-aligned CHW BGR batch."""
         if preprocessed.ndim != 4 or preprocessed.shape[1] != 3:
-            raise ValueError(
-                f"YOLO26Detection expects preprocessed [B, 3, H, W], got {tuple(preprocessed.shape)}"
-            )
+            raise ValueError(f"YOLO26Detection expects preprocessed [B, 3, H, W], got {tuple(preprocessed.shape)}")
 
         x = preprocessed.half() if self.half_precision else preprocessed.float()
         preds = self.yolo_model(x)
