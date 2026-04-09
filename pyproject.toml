@@ -32,7 +32,7 @@ classifiers = [
 ]
 
 dependencies = [
-    "cuvis-ai-core>=0.1.3",
+    "cuvis-ai-core>=0.3.0",
     "click>=8.1.0",
     "loguru>=0.7.0",
     "numpy>=1.23.0",
@@ -56,9 +56,13 @@ dev = [
     "pytest",
     "pytest-cov",
     "coverage[toml]",
+    "ruff",
     "zensical>=0.0.15; python_version >= '3.10'",
     "mkdocs-ultralytics-plugin>=0.2.4", # for meta descriptions and images, dates and authors
     "minijinja>=2.0.0", # render docs macros without mkdocs-macros-plugin
+    "pip-audit",
+    "detect-secrets",
+    "bandit[toml]",
 ]
 export = [
     "numpy<2.0.0", # TensorFlow export compatibility
@@ -166,7 +170,11 @@ in-place = true
 ignore-words-list = "grey,writeable,finalY,RepResNet,Idenfy,WIT,Smoot,EHR,ROUGE,ALS,iTerm,Carmel,FPR,Hach,Calle,ore,COO,MOT,crate,nd,ned,strack,dota,ane,segway,fo,gool,winn,commend,bloc,nam,afterall,skelton,goin"
 skip = "*.pt,*.pth,*.torchscript,*.onnx,*.tflite,*.pb,*.bin,*.param,*.mlmodel,*.engine,*.npy,*.data*,*.csv,*pnnx*,*venv*,*translat*,*lock*,__pycache__*,*.ico,*.jpg,*.png,*.webp,*.avif,*.mp4,*.mov,/runs,/.git,./docs/??/*.md,./docs/mkdocs_??.yml"
 
+[tool.bandit]
+exclude_dirs = ["tests", "ultralytics"]
+skips = ["B101"]
+
 [tool.uv.sources]
 # Keep the local override for day-to-day development. CI and release workflows
 # resolve publishable metadata with `uv ... --no-sources`.
-cuvis-ai-core = { path = "../../cuvis-ai-core/cuvis-ai-core-sam3", editable = true }
+# cuvis-ai-core = { path = "../../cuvis-ai-core/cuvis-ai-core-sam3", editable = true }

@@ -1,7 +1,14 @@
 # Changelog
 
+All notable changes to this project will be documented in this file.
+
+## Unreleased
+
 ## 0.1.0 - 2026-04-07
 
-- package the cuvis.ai Ultralytics nodes as a standalone plugin release
-- add focused CI and tag-based GitHub release workflows for plugin validation
-- document released and local manifest usage for `cuvis-ai-tracking`
+- Added `cuvis_ai_ultralytics` plugin package with `YOLO26Detection`, `YOLOPreprocess`, and `YOLOPostprocess` node classes.
+- Added plugin scaffolding with `pyproject.toml`, `setuptools-scm` versioning, and `.gitignore`.
+- Added CI (`ci.yml`) and tag-driven GitHub release (`release.yml`) workflows.
+- Added security scanning job (pip-audit, detect-secrets, bandit) to release workflow.
+- Restructured README into user-facing, technical, and original upstream docs.
+- Extracted `YOLOPreprocess` node from inline preprocessing for composable pipelines.
