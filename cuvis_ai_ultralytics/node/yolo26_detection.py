@@ -4,6 +4,7 @@ from typing import Any
 
 import torch
 from cuvis_ai_core.node import Node
+from cuvis_ai_schemas.enums import NodeCategory, NodeTag
 from cuvis_ai_schemas.pipeline import PortSpec
 from loguru import logger
 
@@ -24,6 +25,20 @@ class YOLO26Detection(Node):
     half_precision:
         Cast model weights and input to FP16 before inference.
     """
+
+    _category = NodeCategory.MODEL
+    _tags = frozenset(
+        {
+            NodeTag.RGB,
+            NodeTag.IMAGE,
+            NodeTag.DETECTION,
+            NodeTag.BBOX,
+            NodeTag.INFERENCE,
+            NodeTag.LEARNABLE,
+            NodeTag.BATCHED,
+            NodeTag.TORCH,
+        }
+    )
 
     INPUT_SPECS = {
         "preprocessed": PortSpec(

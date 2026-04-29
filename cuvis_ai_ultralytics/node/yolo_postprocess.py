@@ -4,11 +4,22 @@ from typing import Any
 
 import torch
 from cuvis_ai_core.node import Node
+from cuvis_ai_schemas.enums import NodeCategory, NodeTag
 from cuvis_ai_schemas.pipeline import PortSpec
 
 
 class YOLOPostprocess(Node):
     """Ultralytics NMS + box scaling postprocess for YOLO raw tensors."""
+
+    _category = NodeCategory.TRANSFORM
+    _tags = frozenset(
+        {
+            NodeTag.BBOX,
+            NodeTag.DETECTION,
+            NodeTag.POSTPROCESSING,
+            NodeTag.TORCH,
+        }
+    )
 
     INPUT_SPECS = {
         "raw_preds": PortSpec(dtype=torch.float32, shape=(-1, -1, -1), description="Raw YOLO tensor"),
