@@ -6,6 +6,7 @@ from typing import Any
 import torch
 import torch.nn.functional as F
 from cuvis_ai_core.node import Node
+from cuvis_ai_schemas.enums import NodeCategory, NodeTag
 from cuvis_ai_schemas.pipeline import PortSpec
 
 
@@ -24,6 +25,14 @@ class YOLOPreprocess(Node):
         Stride multiple used by the paired YOLO backbone (default 32).
         Pass ``YOLO26Detection(...).stride`` to keep the two nodes in sync.
     """
+
+    _category = NodeCategory.TRANSFORM
+    _tags = frozenset({
+        NodeTag.RGB,
+        NodeTag.IMAGE,
+        NodeTag.PREPROCESSING,
+        NodeTag.TORCH,
+    })
 
     INPUT_SPECS = {
         "rgb_image": PortSpec(
