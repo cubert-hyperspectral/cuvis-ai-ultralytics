@@ -6,7 +6,7 @@ All notable changes to this project will be documented in this file.
 
 ## 0.1.1 - 2026-04-29
 
-- Annotated `YOLO26Detection` with `_category = NodeCategory.MODEL` and `_tags = {RGB, IMAGE, DETECTION, BBOX, INFERENCE, LEARNABLE, BATCHED, TORCH}`; `YOLOPreprocess` with `_category = TRANSFORM` and `_tags = {RGB, IMAGE, PREPROCESSING, TORCH}`; `YOLOPostprocess` with `_category = TRANSFORM` and `_tags = {BBOX, DETECTION, POSTPROCESSING, TORCH}` (ALL-5187 Phase 6).
+- Annotated `YOLO26Detection` with `_category = NodeCategory.MODEL` and `_tags = {RGB, IMAGE, DETECTION, BBOX, INFERENCE, LEARNABLE, BATCHED, TORCH}`; `YOLOPreprocess` with `_category = TRANSFORM` and `_tags = {RGB, IMAGE, PREPROCESSING, TORCH}`; `YOLOPostprocess` with `_category = TRANSFORM` and `_tags = {BBOX, DETECTION, POSTPROCESSING, TORCH}`.
 - Added `cuvis-ai-schemas>=0.4.0` to dependencies (`NodeCategory` / `NodeTag` enums live there).
 - Stripped `hash` fields from `torch` / `torchvision` wheel entries in `uv.lock`.
 

@@ -12,12 +12,14 @@ class YOLOPostprocess(Node):
     """Ultralytics NMS + box scaling postprocess for YOLO raw tensors."""
 
     _category = NodeCategory.TRANSFORM
-    _tags = frozenset({
-        NodeTag.BBOX,
-        NodeTag.DETECTION,
-        NodeTag.POSTPROCESSING,
-        NodeTag.TORCH,
-    })
+    _tags = frozenset(
+        {
+            NodeTag.BBOX,
+            NodeTag.DETECTION,
+            NodeTag.POSTPROCESSING,
+            NodeTag.TORCH,
+        }
+    )
 
     INPUT_SPECS = {
         "raw_preds": PortSpec(dtype=torch.float32, shape=(-1, -1, -1), description="Raw YOLO tensor"),

@@ -27,16 +27,18 @@ class YOLO26Detection(Node):
     """
 
     _category = NodeCategory.MODEL
-    _tags = frozenset({
-        NodeTag.RGB,
-        NodeTag.IMAGE,
-        NodeTag.DETECTION,
-        NodeTag.BBOX,
-        NodeTag.INFERENCE,
-        NodeTag.LEARNABLE,
-        NodeTag.BATCHED,
-        NodeTag.TORCH,
-    })
+    _tags = frozenset(
+        {
+            NodeTag.RGB,
+            NodeTag.IMAGE,
+            NodeTag.DETECTION,
+            NodeTag.BBOX,
+            NodeTag.INFERENCE,
+            NodeTag.LEARNABLE,
+            NodeTag.BATCHED,
+            NodeTag.TORCH,
+        }
+    )
 
     INPUT_SPECS = {
         "preprocessed": PortSpec(

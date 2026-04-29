@@ -27,12 +27,14 @@ class YOLOPreprocess(Node):
     """
 
     _category = NodeCategory.TRANSFORM
-    _tags = frozenset({
-        NodeTag.RGB,
-        NodeTag.IMAGE,
-        NodeTag.PREPROCESSING,
-        NodeTag.TORCH,
-    })
+    _tags = frozenset(
+        {
+            NodeTag.RGB,
+            NodeTag.IMAGE,
+            NodeTag.PREPROCESSING,
+            NodeTag.TORCH,
+        }
+    )
 
     INPUT_SPECS = {
         "rgb_image": PortSpec(
