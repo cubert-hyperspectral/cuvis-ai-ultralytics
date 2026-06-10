@@ -720,7 +720,7 @@ requires-dist = [
     { name = "click", specifier = ">=8.1.0" },
     { name = "coremltools", marker = "python_full_version < '3.14' and sys_platform != 'win32' and extra == 'export'", specifier = ">=9.0" },
     { name = "coverage", extras = ["toml"], marker = "extra == 'dev'" },
-    { name = "cuvis-ai-core", specifier = ">=0.7.0" },
+    { name = "cuvis-ai-core", specifier = ">=0.7.1" },
     { name = "cuvis-ai-schemas", specifier = ">=0.5.2" },
     { name = "detect-secrets", marker = "extra == 'dev'" },
     { name = "faster-coco-eval", marker = "extra == 'extra'", specifier = ">=1.6.7" },

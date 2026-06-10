@@ -32,7 +32,7 @@ classifiers = [
 ]
 
 dependencies = [
-    "cuvis-ai-core>=0.7.0",
+    "cuvis-ai-core>=0.7.1",
     "cuvis-ai-schemas>=0.5.2",
     "click>=8.1.0",
     "loguru>=0.7.0",
