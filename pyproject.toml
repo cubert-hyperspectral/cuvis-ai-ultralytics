@@ -178,4 +178,4 @@ skips = ["B101"]
 [tool.uv.sources]
 # Keep the local override for day-to-day development. CI and release workflows
 # resolve publishable metadata with `uv ... --no-sources`.
-# cuvis-ai-core = { path = "../../cuvis-ai-core/cuvis-ai-core-sam3", editable = true }
+# cuvis-ai-core = { path = "../../cuvis-ai-core/cuvis-ai-core", editable = true }
