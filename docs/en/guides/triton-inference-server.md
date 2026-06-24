@@ -1,4 +1,5 @@
 ---
+title: YOLO26 with NVIDIA Triton Inference Server
 comments: true
 description: Learn how to integrate Ultralytics YOLO26 with NVIDIA Triton Inference Server for scalable, high-performance AI model deployment.
 keywords: Triton Inference Server, YOLO26, Ultralytics, NVIDIA, deep learning, AI model deployment, ONNX, scalable inference
@@ -331,7 +332,7 @@ model = YOLO("yolo26n.pt")
 onnx_file = model.export(format="onnx", dynamic=True)
 ```
 
-You can follow the steps in the [ONNX integration guide](https://docs.ultralytics.com/integrations/onnx/) to complete the process.
+You can follow the steps in the [ONNX integration guide](https://docs.ultralytics.com/integrations/onnx) to complete the process.
 
 ### Can I run inference using the Ultralytics YOLO26 model on Triton Inference Server?
 

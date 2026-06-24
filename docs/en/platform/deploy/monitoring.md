@@ -1,4 +1,5 @@
 ---
+title: Deployment Monitoring
 comments: true
 description: Monitor deployed YOLO models on Ultralytics Platform with real-time metrics, request logs, and performance dashboards.
 keywords: Ultralytics Platform, monitoring, metrics, logs, deployment, performance, YOLO, observability
@@ -230,7 +231,7 @@ The `Predict` tab on each deployment card provides an inline predict panel — t
 
 ### Monitoring Overview
 
-```
+```http
 GET /api/monitoring
 ```
 
@@ -238,7 +239,7 @@ Returns aggregated metrics for all deployments owned by the authenticated user. 
 
 ### Deployment Metrics
 
-```
+```http
 GET /api/deployments/{deploymentId}/metrics?sparkline=true&range=24h
 ```
 
@@ -251,7 +252,7 @@ Returns sparkline data and summary metrics for a specific deployment. Refresh in
 
 ### Deployment Logs
 
-```
+```http
 GET /api/deployments/{deploymentId}/logs?limit=50&severity=ERROR,WARNING
 ```
 
@@ -265,7 +266,7 @@ Returns recent log entries with optional severity filter and pagination.
 
 ### Deployment Health
 
-```
+```http
 GET /api/deployments/{deploymentId}/health
 ```
 
@@ -275,7 +276,8 @@ Returns health check status with response latency.
 {
     "healthy": true,
     "status": 200,
-    "latencyMs": 142
+    "latencyMs": 142,
+    "serverTiming": { "db": 8, "ping": 142, "total": 150 }
 }
 ```
 

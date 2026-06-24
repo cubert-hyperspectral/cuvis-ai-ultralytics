@@ -1,4 +1,5 @@
 ---
+title: YOLOv10: NMS-Free Object Detection
 comments: true
 description: Discover YOLOv10 for real-time object detection, eliminating NMS and boosting efficiency. Achieve top performance with a low computational cost.
 keywords: YOLOv10, real-time object detection, NMS-free, deep learning, Tsinghua University, Ultralytics, machine learning, neural networks, performance optimization
@@ -153,7 +154,7 @@ _Params and FLOPs values are for the fused model after `model.fuse()`, which mer
 
 ## Usage Examples
 
-For predicting new images with YOLOv10:
+For predicting new images with YOLOv10. Models can also be trained on cloud GPUs through [Ultralytics Platform](https://platform.ultralytics.com):
 
 !!! example
 
