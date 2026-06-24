@@ -1,4 +1,5 @@
 ---
+title: Train YOLO on COCO JSON Without Conversion
 comments: true
 description: Train Ultralytics YOLO directly on COCO JSON annotations without converting to YOLO format. Custom dataset and trainer example with complete working code for detection training.
 keywords: COCO JSON training, train YOLO on COCO JSON, COCO JSON without conversion, custom YOLO dataset, custom YOLO trainer, COCO annotations YOLO, direct COCO training, Ultralytics YOLO, object detection training, YOLODataset subclass, COCO format training, skip annotation conversion
@@ -47,6 +48,7 @@ class COCODataset(YOLODataset):
     """Dataset that reads COCO JSON annotations directly without conversion to .txt files."""
 
     def __init__(self, *args, json_file="", **kwargs):
+        """Initialize the dataset with a COCO JSON annotation file."""
         self.json_file = json_file
         super().__init__(*args, data={"channels": 3}, **kwargs)
 
@@ -138,6 +140,7 @@ class COCOTrainer(DetectionTrainer):
     """Trainer that uses COCODataset for direct COCO JSON training."""
 
     def build_dataset(self, img_path, mode="train", batch=None):
+        """Build a COCODataset for the given split using the JSON file from the data config."""
         json_file = self.data["train_json"] if mode == "train" else self.data.get("val_json", self.data["train_json"])
         return COCODataset(
             img_path=img_path,
@@ -230,13 +233,16 @@ class COCODataset(YOLODataset):
     """Dataset that reads COCO JSON annotations directly without conversion to .txt files."""
 
     def __init__(self, *args, json_file="", **kwargs):
+        """Initialize the dataset with a COCO JSON annotation file."""
         self.json_file = json_file
         super().__init__(*args, data={"channels": 3}, **kwargs)
 
     def get_img_files(self, img_path):
+        """Image paths are resolved from the JSON file, not from scanning a directory."""
         return []
 
     def cache_labels(self, path=Path("./labels.cache")):
+        """Parse COCO JSON and convert annotations to YOLO format, saving results to a .cache file."""
         x = {"labels": []}
         with open(self.json_file) as f:
             coco = json.load(f)
@@ -285,6 +291,7 @@ class COCODataset(YOLODataset):
         return x
 
     def get_labels(self):
+        """Load labels from .cache file if available, otherwise parse JSON and create the cache."""
         cache_path = Path(self.json_file).with_suffix(".cache")
         try:
             cache = load_dataset_cache_file(cache_path)
@@ -302,6 +309,7 @@ class COCOTrainer(DetectionTrainer):
     """Trainer that uses COCODataset for direct COCO JSON training."""
 
     def build_dataset(self, img_path, mode="train", batch=None):
+        """Build a COCODataset for the given split using the JSON file from the data config."""
         json_file = self.data["train_json"] if mode == "train" else self.data.get("val_json", self.data["train_json"])
         return COCODataset(
             img_path=img_path,

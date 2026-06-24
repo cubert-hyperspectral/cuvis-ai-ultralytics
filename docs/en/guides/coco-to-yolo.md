@@ -1,4 +1,5 @@
 ---
+title: Convert COCO JSON Annotations to YOLO
 comments: true
 description: Learn how to convert COCO JSON annotations to YOLO format for object detection, instance segmentation, and pose estimation training. Complete guide with step-by-step examples, common pitfalls, and class ID mapping for custom datasets.
 keywords: COCO to YOLO, convert COCO JSON to YOLO, COCO JSON format, YOLO annotation format, convert_coco, COCO dataset training, train YOLO on COCO, object detection dataset, instance segmentation dataset, pose estimation dataset, dataset conversion, annotation format, cls91to80, category_id, bounding box format, YOLO training data
@@ -10,7 +11,7 @@ Training [Ultralytics YOLO](https://www.ultralytics.com/) models requires annota
 
 ## Why Convert from COCO to YOLO?
 
-The COCO JSON format stores all annotations in a single file, while [YOLO](https://docs.ultralytics.com/datasets/detect/#ultralytics-yolo-format) uses one text file per image with normalized coordinates. Converting is necessary because:
+The COCO JSON format stores all annotations in a single file, while [YOLO](https://docs.ultralytics.com/datasets/detect#ultralytics-yolo-format) uses one text file per image with normalized coordinates. Converting is necessary because:
 
 - **YOLO models require `.txt` label files** with one file per image, containing `class x_center y_center width height` in normalized coordinates.
 - **COCO JSON uses pixel coordinates** in `[x_min, y_min, width, height]` format with a single JSON file for all images.

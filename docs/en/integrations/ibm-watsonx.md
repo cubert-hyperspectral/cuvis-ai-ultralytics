@@ -1,4 +1,5 @@
 ---
+title: Train YOLO26 Models with IBM Watsonx
 comments: true
 description: Dive into our detailed integration guide on using IBM Watson to train a YOLO26 model. Uncover key features and step-by-step instructions on model training.
 keywords: IBM Watsonx, IBM Watsonx AI, What is Watson?, IBM Watson Integration, IBM Watson Features, YOLO26, Ultralytics, Model Training, GPU, TPU, cloud computing
@@ -87,7 +88,7 @@ Then, you can import the needed packages.
 
 For this tutorial, we will use a [marine litter dataset](https://www.kaggle.com/datasets/atiqishrak/trash-dataset-icra19) available on Kaggle. With this dataset, we will custom-train a YOLO26 model to detect and classify litter and biological objects in underwater images.
 
-We can load the dataset directly into the notebook using the Kaggle API. First, create a free Kaggle account. Once you have created an account, you'll need to generate an API key. Directions for generating your key can be found in the [Kaggle API documentation](https://github.com/Kaggle/kaggle-api/blob/main/docs/README.md) under the section "API credentials".
+We can load the dataset directly into the notebook using the Kaggle API. First, create a free Kaggle account. Once you have created an account, you'll need to generate an API key. Directions for generating your key can be found in the [Kaggle API documentation](https://github.com/Kaggle/kaggle-cli/blob/main/docs/README.md) under the section "API credentials".
 
 Copy and paste your Kaggle username and API key into the following code. Then run the code to install the API and load the dataset into Watsonx.
 
@@ -396,7 +397,7 @@ if __name__ == "__main__":
     organize_files(directory)
 ```
 
-For more details, refer to our [data preprocessing guide](../guides/preprocessing_annotated_data.md).
+For more details, refer to our [data preprocessing guide](../guides/preprocessing-annotated-data.md).
 
 ### What are the prerequisites for training a YOLO26 model on IBM Watsonx?
 

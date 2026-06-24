@@ -204,3 +204,6 @@ calibration_*.npy
 args.yaml
 results.csv
 .history/
+
+# CI test asset cache
+.ultralytics_cache/

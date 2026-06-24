@@ -1,4 +1,5 @@
 ---
+title: YOLO26 Instance Segmentation & Tracking
 comments: true
 description: Master instance segmentation and tracking with Ultralytics YOLO26. Learn techniques for precise object identification and tracking.
 keywords: instance segmentation, tracking, YOLO26, Ultralytics, object detection, machine learning, computer vision, python
@@ -96,7 +97,7 @@ There are two types of instance segmentation tracking available in the Ultralyti
 Here's a table with the `InstanceSegmentation` arguments:
 
 {% from "macros/solutions-args.md" import param_table %}
-{{ param_table(["model", "region"]) }}
+{{ param_table(["model"]) }}
 
 You can also take advantage of `track` arguments within the `InstanceSegmentation` solution:
 
@@ -106,7 +107,7 @@ You can also take advantage of `track` arguments within the `InstanceSegmentatio
 Moreover, the following visualization arguments are available:
 
 {% from "macros/visualization-args.md" import param_table %}
-{{ param_table(["show", "line_width", "show_conf", "show_labels"]) }}
+{{ param_table(["show", "line_width", "show_conf", "show_labels", "show_boxes"]) }}
 
 ## Applications of Instance Segmentation
 
@@ -170,7 +171,7 @@ video_writer.release()
 cv2.destroyAllWindows()
 ```
 
-Learn more about instance segmentation in the [Ultralytics YOLO26 guide](https://docs.ultralytics.com/tasks/segment/).
+Learn more about instance segmentation in the [Ultralytics YOLO26 guide](https://docs.ultralytics.com/tasks/segment).
 
 ### What is the difference between instance segmentation and object tracking in Ultralytics YOLO26?
 
@@ -182,4 +183,4 @@ Ultralytics YOLO26 offers real-time performance, superior [accuracy](https://www
 
 ### Are there any datasets provided by Ultralytics suitable for training YOLO26 models for instance segmentation and tracking?
 
-Yes, Ultralytics offers several datasets suitable for training YOLO26 models for instance segmentation, including [COCO-Seg](https://docs.ultralytics.com/datasets/segment/coco/), [COCO8-Seg](https://docs.ultralytics.com/datasets/segment/coco8-seg/) (a smaller subset for quick testing), [Package-Seg](https://docs.ultralytics.com/datasets/segment/package-seg/), and [Crack-Seg](https://docs.ultralytics.com/datasets/segment/crack-seg/). These datasets come with pixel-level annotations needed for instance segmentation tasks. For more specialized applications, you can also create custom datasets following the Ultralytics format. Complete dataset information and usage instructions can be found in the [Ultralytics Datasets documentation](https://docs.ultralytics.com/datasets/).
+Yes, Ultralytics offers several datasets suitable for training YOLO26 models for instance segmentation, including [COCO-Seg](https://docs.ultralytics.com/datasets/segment/coco), [COCO8-Seg](https://docs.ultralytics.com/datasets/segment/coco8-seg) (a smaller subset for quick testing), [Package-Seg](https://docs.ultralytics.com/datasets/segment/package-seg), and [Crack-Seg](https://docs.ultralytics.com/datasets/segment/crack-seg). These datasets come with pixel-level annotations needed for instance segmentation tasks. For more specialized applications, you can also create custom datasets following the Ultralytics format. Complete dataset information and usage instructions can be found in the [Ultralytics Datasets documentation](https://docs.ultralytics.com/datasets).
