@@ -73,6 +73,14 @@ jobs:
       - name: Run detect-secrets
         run: uv run --no-sources --locked --extra dev detect-secrets scan --baseline .secrets.baseline
 
+      - name: Run pip-audit
+        run: |
+          # CVE-2025-3000 (torch): fixed in 2.13.0; the pinned line stays on 2.11 until the next
+          # torch release is qualified for the ecosystem, so the advisory is ignored until then.
+          # PYSEC-2026-3447 (setuptools): fixed in 83.0.0; the export and solutions extras cap
+          # setuptools at 81, and the flaw only affects building sdists on macOS.
+          uv run --no-sources --locked --extra dev pip-audit --desc on --skip-editable --ignore-vuln CVE-2025-3000 --ignore-vuln PYSEC-2026-3447
+
   build:
     name: Build And Validate
     needs: [test, lint]

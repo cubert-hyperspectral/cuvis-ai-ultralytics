@@ -2,6 +2,10 @@
 
 All notable changes to this project will be documented in this file.
 
+## Unreleased
+
+- Security: a pip-audit step joins the CI security job (there was none) and the locked environment is refreshed for the open advisories: aiohttp 3.14.3, anyio 4.14.2, click 8.5.0, cryptography 50.0.1, gitpython 3.1.62, hydra-core 1.3.7, keras 3.15.1, mako 1.4.3, mlflow 3.16.1, msgpack 1.2.2, onnx 1.23.0 (the macOS entry stays at 1.17.0 under the export extra's cap), pillow 12.3.0, pip 26.2.1, pyasn1 0.6.4, pymdown-extensions 12.1, pytest 9.1.1, pytorch-lightning 2.6.6, soupsieve 2.10, sqlparse 0.6.0, starlette 1.7.0, tornado 6.5.10. Ignored with a comment in CI: torch CVE-2025-3000 (fixed in 2.13.0, the pinned line stays) and setuptools PYSEC-2026-3447 (capped at 81 by the export and solutions extras; macOS sdist builds only).
+
 ## 0.1.4 - 2026-07-17
 
 - Raised the `cuvis-ai-schemas` floor to 0.8.0 and `cuvis-ai-core` to 0.11.0, adopting the released cuvis-ai-next framework versions.
