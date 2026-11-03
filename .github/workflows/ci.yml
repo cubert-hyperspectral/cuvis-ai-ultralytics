@@ -79,7 +79,9 @@ jobs:
           # torch release is qualified for the ecosystem, so the advisory is ignored until then.
           # PYSEC-2026-3447 (setuptools): fixed in 83.0.0; the export and solutions extras cap
           # setuptools at 81, and the flaw only affects building sdists on macOS.
-          uv run --no-sources --locked --extra dev pip-audit --desc on --skip-editable --ignore-vuln CVE-2025-3000 --ignore-vuln PYSEC-2026-3447
+          # GHSA-xmj3-9gf7-h52w (setuptools): fixed in 84.1.0, behind the same caps; the flaw sits in
+          # the legacy egg install of a crafted wheel on Windows, a path this job never takes.
+          uv run --no-sources --locked --extra dev pip-audit --desc on --skip-editable --ignore-vuln CVE-2025-3000 --ignore-vuln PYSEC-2026-3447 --ignore-vuln GHSA-xmj3-9gf7-h52w
 
   build:
     name: Build And Validate
