@@ -2,7 +2,7 @@
 
 All notable changes to this project will be documented in this file.
 
-## Unreleased
+## 0.1.5 - 2026-11-03
 
 - `YOLOPreprocess` keeps the channel order of its RGB input instead of swapping it to BGR. Ultralytics models take RGB (the library's own predictor converts cv2 BGR frames to RGB right before the model), so every model behind the node saw swapped colours and missed or mislabelled objects defined by their colour (yolov8n found none of the eleven carrots in a reference photo); with the fix the node reproduces the plain ultralytics result to the digit. The docstrings and port descriptions of `YOLOPreprocess` and `YOLO26Detection` say RGB now.
 - `YOLOPreprocess(imgsz=...)` scales the long side of the image to `imgsz` and pads the short side up to the next stride multiple, the rectangle ultralytics' LetterBox produces with `auto=True` at its default `imgsz=640`. An `imgsz` that is not a multiple of the stride is rounded up to the next multiple, as ultralytics does, so the long side is never padded and `YOLOPostprocess` scales the boxes back with the same gain the resize used. The default `None` keeps the previous behaviour: the image stays at its own resolution and is only padded to the stride multiple.
