@@ -11,19 +11,28 @@ from cuvis_ai_schemas.pipeline import PortSpec
 
 
 class YOLOPreprocess(Node):
-    """Convert RGB images to stride-aligned channel-first BGR tensors for YOLO.
+    """Convert RGB images to stride-aligned channel-first tensors for YOLO.
 
-    Handles the full letterbox pipeline: HWC RGB [0,1] → CHW BGR [0,1],
-    proportional resize to fill a stride-aligned canvas, grey-padding at
-    114/255 on the remaining borders.  Emits ``orig_hw`` and
-    ``model_input_hw`` so that ``YOLOPostprocess`` can scale boxes back to
-    source coordinates without any knowledge of this node's internals.
+    Handles the full letterbox pipeline: HWC RGB [0,1] to CHW RGB [0,1],
+    proportional resize, grey-padding at 114/255 on the remaining borders.
+    The channel order is kept: ultralytics models take RGB, and the library's
+    own predictor turns cv2 BGR frames into RGB right before the model. Emits
+    ``orig_hw`` and ``model_input_hw`` so that ``YOLOPostprocess`` can scale
+    boxes back to source coordinates without any knowledge of this node's
+    internals.
 
     Parameters
     ----------
     stride:
         Stride multiple used by the paired YOLO backbone (default 32).
         Pass ``YOLO26Detection(...).stride`` to keep the two nodes in sync.
+    imgsz:
+        Long side of the model input in pixels, the ``imgsz`` of an ultralytics
+        predict call (640 by default there). The image is scaled so its long
+        side equals ``imgsz`` and the short side is padded up to the next
+        stride multiple, the rectangle ultralytics' LetterBox produces with
+        ``auto=True``. ``None`` (the default) keeps the image at its own
+        resolution and only pads it to the stride multiple.
     """
 
     _category = NodeCategory.TRANSFORM
@@ -48,7 +57,7 @@ class YOLOPreprocess(Node):
         "preprocessed": PortSpec(
             dtype=torch.float32,
             shape=(-1, 3, -1, -1),
-            description="Channel-first BGR [B, 3, H', W'] stride-aligned, in [0, 1]",
+            description="Channel-first RGB [B, 3, H', W'] stride-aligned, in [0, 1]",
         ),
         "model_input_hw": PortSpec(
             dtype=torch.int64,
@@ -62,9 +71,12 @@ class YOLOPreprocess(Node):
         ),
     }
 
-    def __init__(self, stride: int = 32, **kwargs: Any) -> None:
+    def __init__(self, stride: int = 32, imgsz: int | None = None, **kwargs: Any) -> None:
         self.stride = max(int(stride), 1)
-        super().__init__(stride=stride, **kwargs)
+        if imgsz is not None and int(imgsz) < 1:
+            raise ValueError(f"YOLOPreprocess imgsz must be a positive number of pixels or None, got {imgsz}")
+        self.imgsz = None if imgsz is None else int(imgsz)
+        super().__init__(stride=stride, imgsz=imgsz, **kwargs)
 
     def forward(self, rgb_image: torch.Tensor, **_: Any) -> dict[str, torch.Tensor]:
         """Preprocess a batch of RGB images for YOLO inference."""
@@ -77,28 +89,34 @@ class YOLOPreprocess(Node):
 
         orig_hw = torch.tensor([[in_h, in_w]] * batch, dtype=torch.int64, device=device)
 
-        # HWC RGB → CHW BGR; values stay in [0, 1].
-        x = rgb_image[..., [2, 1, 0]].permute(0, 3, 1, 2).contiguous()
+        # HWC RGB to CHW RGB; values stay in [0, 1]. No channel swap: the model takes RGB.
+        x = rgb_image.permute(0, 3, 1, 2).contiguous()
 
-        # Letterbox: proportional resize then grey-pad to stride multiple.
-        target_h = int(math.ceil(in_h / self.stride) * self.stride)
-        target_w = int(math.ceil(in_w / self.stride) * self.stride)
-
-        if target_h != in_h or target_w != in_w:
+        # Letterbox: proportional resize then grey-pad to a stride multiple.
+        if self.imgsz is None:
+            target_h = self._ceil_to_stride(in_h)
+            target_w = self._ceil_to_stride(in_w)
             gain = min(target_h / in_h, target_w / in_w)
             resized_h = max(int(round(in_h * gain)), 1)
             resized_w = max(int(round(in_w * gain)), 1)
-            if resized_h != in_h or resized_w != in_w:
-                x = F.interpolate(x, size=(resized_h, resized_w), mode="bilinear", align_corners=False)
+        else:
+            gain = self.imgsz / max(in_h, in_w)
+            resized_h = max(int(round(in_h * gain)), 1)
+            resized_w = max(int(round(in_w * gain)), 1)
+            target_h = self._ceil_to_stride(resized_h)
+            target_w = self._ceil_to_stride(resized_w)
 
-            pad_h = target_h - resized_h
-            pad_w = target_w - resized_w
-            top = int(round(pad_h / 2 - 0.1))
-            bottom = pad_h - top
-            left = int(round(pad_w / 2 - 0.1))
-            right = pad_w - left
-            if top or bottom or left or right:
-                x = F.pad(x, (left, right, top, bottom), value=114.0 / 255.0)
+        if resized_h != in_h or resized_w != in_w:
+            x = F.interpolate(x, size=(resized_h, resized_w), mode="bilinear", align_corners=False)
+
+        pad_h = target_h - resized_h
+        pad_w = target_w - resized_w
+        top = int(round(pad_h / 2 - 0.1))
+        bottom = pad_h - top
+        left = int(round(pad_w / 2 - 0.1))
+        right = pad_w - left
+        if top or bottom or left or right:
+            x = F.pad(x, (left, right, top, bottom), value=114.0 / 255.0)
 
         model_input_hw = torch.tensor([[x.shape[2], x.shape[3]]] * batch, dtype=torch.int64, device=device)
 
@@ -107,3 +125,6 @@ class YOLOPreprocess(Node):
             "model_input_hw": model_input_hw,
             "orig_hw": orig_hw,
         }
+
+    def _ceil_to_stride(self, size: int) -> int:
+        return int(math.ceil(size / self.stride) * self.stride)

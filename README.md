@@ -19,7 +19,7 @@ cuvis.ai is split across multiple repositories:
 
 | Node | Description |
 |---|---|
-| `YOLOPreprocess` | Letterbox resize/pad and RGB-to-BGR channel flip for YOLO input |
+| `YOLOPreprocess` | Letterbox resize and pad for YOLO input (optional `imgsz`); the RGB channel order is kept |
 | `YOLO26Detection` | YOLO26 object detection inference |
 | `YOLOPostprocess` | NMS filtering and coordinate rescaling to original frame dimensions |
 

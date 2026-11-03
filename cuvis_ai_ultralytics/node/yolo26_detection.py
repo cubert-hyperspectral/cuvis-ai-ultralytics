@@ -10,9 +10,9 @@ from loguru import logger
 
 
 class YOLO26Detection(Node):
-    """Run YOLO26 raw tensor inference on a stride-aligned CHW BGR batch.
+    """Run YOLO26 raw tensor inference on a stride-aligned CHW RGB batch.
 
-    Expects input from :class:`YOLOPreprocess` — a channel-first BGR tensor
+    Expects input from :class:`YOLOPreprocess`: a channel-first RGB tensor
     whose spatial dimensions are already stride-aligned and padded.  The node
     holds only the inner ``nn.Module`` extracted from the Ultralytics wrapper so
     that ``pipeline.to(device)`` propagates weights correctly without triggering
@@ -44,7 +44,7 @@ class YOLO26Detection(Node):
         "preprocessed": PortSpec(
             dtype=torch.float32,
             shape=(-1, 3, -1, -1),
-            description="Channel-first BGR [B, 3, H', W'] from YOLOPreprocess",
+            description="Channel-first RGB [B, 3, H', W'] from YOLOPreprocess",
         ),
     }
 
@@ -94,7 +94,7 @@ class YOLO26Detection(Node):
         logger.info("YOLO model loaded (stride={})", self.stride)
 
     def forward(self, preprocessed: torch.Tensor, **_: Any) -> dict[str, torch.Tensor]:
-        """Execute raw model forward on a stride-aligned CHW BGR batch."""
+        """Execute raw model forward on a stride-aligned CHW RGB batch."""
         if preprocessed.ndim != 4 or preprocessed.shape[1] != 3:
             raise ValueError(f"YOLO26Detection expects preprocessed [B, 3, H, W], got {tuple(preprocessed.shape)}")
 
