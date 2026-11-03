@@ -2,6 +2,10 @@
 
 All notable changes to this project will be documented in this file.
 
+## Unreleased
+
+- Security: the locked environment is refreshed for the advisories published since 0.1.5: aiohttp 3.14.5, certifi 2026.10.23, filelock 4.2.7, fsspec 2026.9.0, gitpython 3.2.1, hydra-core 1.3.8, msgpack 1.2.4, multidict 7.2.1, pillow 13.0.0 and urllib3 2.8.0 (streamlit follows to 1.66.1 under the solutions extra, which drops tornado). Ignored with a comment in CI next to the two existing entries: setuptools GHSA-xmj3-9gf7-h52w (fixed in 84.1.0, capped at 81 by the export and solutions extras; the flaw sits in the legacy egg install of a crafted wheel on Windows).
+
 ## 0.1.5 - 2026-11-03
 
 - `YOLOPreprocess` keeps the channel order of its RGB input instead of swapping it to BGR. Ultralytics models take RGB (the library's own predictor converts cv2 BGR frames to RGB right before the model), so every model behind the node saw swapped colours and missed or mislabelled objects defined by their colour (yolov8n found none of the eleven carrots in a reference photo); with the fix the node reproduces the plain ultralytics result to the digit. The docstrings and port descriptions of `YOLOPreprocess` and `YOLO26Detection` say RGB now.
