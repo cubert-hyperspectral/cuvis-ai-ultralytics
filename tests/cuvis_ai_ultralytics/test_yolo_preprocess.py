@@ -133,3 +133,32 @@ def test_imgsz_is_a_serialised_hparam() -> None:
     assert node.imgsz == 640
     assert node.hparams["imgsz"] == 640
     assert YOLOPreprocess(stride=32).hparams["imgsz"] is None
+
+
+def test_imgsz_is_rounded_up_to_the_stride() -> None:
+    # ultralytics snaps imgsz to a stride multiple before it is used (check_imgsz); without it the
+    # long side would be padded too and YOLOPostprocess would rebuild a different gain from the
+    # padded shape than the one the resize used.
+    node = YOLOPreprocess(stride=32, imgsz=100)
+    assert node.imgsz == 128
+    assert node.hparams["imgsz"] == 128
+    rgb = torch.rand((1, 100, 200, 3), dtype=torch.float32)
+    out = node.forward(rgb_image=rgb)
+    assert out["model_input_hw"][0].tolist() == [64, 128]
+
+
+def test_imgsz_long_side_is_never_padded() -> None:
+    node = YOLOPreprocess(stride=32, imgsz=160)
+    for h, w in ((93, 131), (131, 93), (160, 160), (17, 400)):
+        out = node.forward(rgb_image=torch.rand((1, h, w, 3), dtype=torch.float32))
+        model_h, model_w = out["model_input_hw"][0].tolist()
+        assert max(model_h, model_w) == 160, (h, w, model_h, model_w)
+
+
+def test_imgsz_path_handles_a_batch() -> None:
+    node = YOLOPreprocess(stride=32, imgsz=64)
+    rgb = torch.rand((2, 50, 70, 3), dtype=torch.float32)
+    out = node.forward(rgb_image=rgb)
+    assert out["preprocessed"].shape == (2, 3, 64, 64)
+    assert out["model_input_hw"].tolist() == [[64, 64], [64, 64]]
+    assert out["orig_hw"].tolist() == [[50, 70], [50, 70]]

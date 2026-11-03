@@ -8,6 +8,7 @@ import torch.nn.functional as F
 from cuvis_ai_core.node import Node
 from cuvis_ai_schemas.enums import NodeCategory, NodeTag
 from cuvis_ai_schemas.pipeline import PortSpec
+from loguru import logger
 
 
 class YOLOPreprocess(Node):
@@ -31,7 +32,10 @@ class YOLOPreprocess(Node):
         predict call (640 by default there). The image is scaled so its long
         side equals ``imgsz`` and the short side is padded up to the next
         stride multiple, the rectangle ultralytics' LetterBox produces with
-        ``auto=True``. ``None`` (the default) keeps the image at its own
+        ``auto=True``. A value that is not a multiple of ``stride`` is rounded
+        up to the next multiple, as ultralytics' ``check_imgsz`` does, so the
+        long side is never padded and ``YOLOPostprocess`` rebuilds the same
+        gain the resize used. ``None`` (the default) keeps the image at its own
         resolution and only pads it to the stride multiple.
     """
 
@@ -73,9 +77,19 @@ class YOLOPreprocess(Node):
 
     def __init__(self, stride: int = 32, imgsz: int | None = None, **kwargs: Any) -> None:
         self.stride = max(int(stride), 1)
-        if imgsz is not None and int(imgsz) < 1:
-            raise ValueError(f"YOLOPreprocess imgsz must be a positive number of pixels or None, got {imgsz}")
-        self.imgsz = None if imgsz is None else int(imgsz)
+        if imgsz is not None:
+            if int(imgsz) < 1:
+                raise ValueError(f"YOLOPreprocess imgsz must be a positive number of pixels or None, got {imgsz}")
+            rounded = self._ceil_to_stride(int(imgsz))
+            if rounded != int(imgsz):
+                logger.warning(
+                    "YOLOPreprocess imgsz={} is not a multiple of stride {}; using {} as ultralytics does",
+                    imgsz,
+                    self.stride,
+                    rounded,
+                )
+            imgsz = rounded
+        self.imgsz = imgsz
         super().__init__(stride=stride, imgsz=imgsz, **kwargs)
 
     def forward(self, rgb_image: torch.Tensor, **_: Any) -> dict[str, torch.Tensor]:
